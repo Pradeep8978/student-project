@@ -1,38 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import reduxThunk from 'redux-thunk';
-import axios from 'axios';
+/*!
 
-import registerServiceWorker from './registerServiceWorker';
-import App from './components/App';
-import Home from './components/Home';
-import SignUp from './components/SignUp';
-import SignIn from './components/SignIn';
-import Dashboard from './components/Dashboard';
-import reducers from './reducers';
+=========================================================
+* Paper Dashboard React - v1.2.0
+=========================================================
 
-import authGuard from './components/HOCs/authGuard';
+* Product Page: https://www.creative-tim.com/product/paper-dashboard-react
+* Copyright 2020 Creative Tim (https://www.creative-tim.com)
 
-axios.defaults.withCredentials = true;
+* Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-/*
-  1) Disable the httpOnly property :(
-  2) Fire off a request on app load to the BE which will check if the user is auth-ed
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
 */
+import React from "react";
+import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
+import { Router, Route, Switch, Redirect } from "react-router-dom";
+
+import "bootstrap/dist/css/bootstrap.css";
+import "assets/scss/paper-dashboard.scss?v=1.2.0";
+import "assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+
+import AdminLayout from "layouts/Admin.js";
+import App from "./App";
+
+const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <Provider store={createStore(reducers, {}, applyMiddleware(reduxThunk))}>
-    <BrowserRouter>
-      <App>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/signup" component={SignUp} />
-        <Route exact path="/signin" component={SignIn} />
-        <Route exact path="/dashboard" component={authGuard(Dashboard)} />
-      </App>
-    </BrowserRouter>
-  </Provider>, 
-  document.querySelector('#root'));
-registerServiceWorker();
+  <App/>,
+  document.getElementById("root")
+);
