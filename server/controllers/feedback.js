@@ -3,14 +3,7 @@ const Feedback = require('../models/feedback');
 const Customers = require('../models/customers');
 
 const { JWT_SECRET } = require('../configuration');
-const signToken = user => {
-    return JWT.sign({
-        iss: 'ramustocks',
-        sub: user.id,
-        iat: new Date().getTime(), // current time
-        exp: new Date().setDate(new Date().getDate() + 1) // current time + 1 day ahead
-    }, JWT_SECRET);
-}
+
 module.exports = {
     createFeedback: async (req, res) => {        
     Customers.findOne({_id:req.user.id}, function(err, result) {
