@@ -1,44 +1,88 @@
-const express = require('express');
-const router = require('express-promise-router')();
-const passport = require('passport');
-const passportConf = require('../passport');
+const express = require("express");
+const router = require("express-promise-router")();
+const passport = require("passport");
+const passportConf = require("../passport");
+// const {signInStrategy} = require('../userPassport');
+// const axios = require('axios')
+const {
+  validateBody,
+  schemas,
+  validateParams,
+} = require("../helpers/routeHelpers");
+const UserController = require("../controllers/users");
+const passportSignIn = passport.authenticate("local", { session: false });
+const passportJWT = passport.authenticate("jwt", { session: false });
+const multer = require("multer");
+var os = require("os");
+// SET STORAGE
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+  },
+});
 
-const { validateBody, schemas } = require('../helpers/routeHelpers');
-const UsersController = require('../controllers/users');
-const passportSignIn = passport.authenticate('local', { session: false });
-const passportJWT = passport.authenticate('jwt', { session: false });
+const upload = multer({ storage: storage });
 
-router.route('/signup')
-  .post(validateBody(schemas.authSchema), UsersController.signUp);
+router
+  .route("/signup")
+  .post(validateBody(schemas.authSchema), UserController.signUp);
 
-router.route('/signin')
-  .post(validateBody(schemas.authSchema), passportSignIn, UsersController.signIn);
+router
+  .route("/signin")
+  .post(
+    validateBody(schemas.loginSchema),
+    passportSignIn,
+    UserController.signIn
+  );
 
-router.route('/signout')
-  .get(passportJWT, UsersController.signOut);
+router
+  .route("/create/employee")
+  .post(
+    passportJWT,
+    validateBody(schemas.authSchema),
+    UserController.createEmployee
+  );
 
-router.route('/oauth/google')
-  .post(passport.authenticate('googleToken', { session: false }), UsersController.googleOAuth);
+router.route("/list").get(UserController.getUsers);
 
-router.route('/oauth/facebook')
-  .post(passport.authenticate('facebookToken', { session: false }), UsersController.facebookOAuth);
+router
+  .route("/profile/update")
+  .put(
+    passportJWT,
+    UserController.updateProfile
+  );
 
-router.route('/oauth/link/google')
-  .post(passportJWT, passport.authorize('googleToken', { session: false }), UsersController.linkGoogle)
+router
+  .route("/profile/address/new")
+  .post(
+    passportJWT,
+    validateBody(schemas.userAddress),
+    UserController.addNewAddress
+  );
+router
+  .route("/profile/address/update/:addressId")
+  .put(
+    passportJWT,
+    validateBody(schemas.userAddress),
+    UserController.updateAddress
+  );
 
-router.route('/oauth/unlink/google')
-  .post(passportJWT, UsersController.unlinkGoogle);
+router
+  .route("/profile/address/delete/:addressId")
+  .delete(passportJWT, UserController.removeAddress);
 
-router.route('/oauth/link/facebook')
-  .post(passportJWT, passport.authorize('facebookToken', { session: false }), UsersController.linkFacebook)
+router.route("/profile").get(passportJWT, UserController.getProfile);
 
-router.route('/oauth/unlink/facebook')
-  .post(passportJWT, UsersController.unlinkFacebook);
+router.route("/status").get(passportJWT, UserController.checkAuth);
 
-router.route('/dashboard')
-  .get(passportJWT, UsersController.dashboard);
+router.route("/delete/:id").delete(passportJWT, UserController.deleteUser);
 
-router.route('/status')
-  .get(passportJWT, UsersController.checkAuth);
+router.route("/otp/generate").post(validateBody(schemas.otpGenerate), UserController.otpGenerate);
+router.route("/check/otp").post(validateBody(schemas.checkOtp), UserController.checkOtp);
+router.route("/update/newpassword").put(validateBody(schemas.updateNewpassword), UserController.updateNewPassword)
+router.route("/changepassword").put(passportJWT, validateBody(schemas.changePassword), UserController.changePassword)
 
 module.exports = router;

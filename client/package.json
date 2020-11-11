@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://demos.creative-tim.com/paper-dashboard-react/#/dashboard",
   "dependencies": {
+    "axios": "^0.21.0",
     "bootstrap": "4.5.0",
     "chart.js": "2.9.3",
     "formik": "^2.2.3",
