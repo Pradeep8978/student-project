@@ -23,7 +23,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.route('/create')
-  .post(passportJWT, validateBody(schemas.feedbackSchema), feedbackController.createFeedback);
+  .post(passportJWT, feedbackController.createFeedback);
 router.route('/list')
   .get(passportJWT,feedbackController.getFeedback);
 
