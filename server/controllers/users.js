@@ -1,185 +1,261 @@
-const JWT = require('jsonwebtoken');
-const User = require('../models/user');
-const { JWT_SECRET } = require('../configuration');
+const JWT = require("jsonwebtoken");
+const Users = require("../models/users");
+const Referals = require("../models/referals");
+const emailController = require("./emails");
+const { JWT_SECRET } = require("../configuration");
+const multer = require("multer");
+const mongoose = require("mongoose");
+const fs = require("fs");
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
 
-signToken = user => {
-  return JWT.sign({
-    iss: 'CodeWorkr',
-    sub: user.id,
-    iat: new Date().getTime(), // current time
-    exp: new Date().setDate(new Date().getDate() + 1) // current time + 1 day ahead
-  }, JWT_SECRET);
-}
+const signToken = (user) => {
+  return JWT.sign(
+    {
+      iss: "ramustocks",
+      sub: user.id,
+      iat: new Date().getTime(), // current time
+      exp: new Date().setDate(new Date().getDate() + 1), // current time + 1 day ahead
+    },
+    JWT_SECRET
+  );
+};
 
 module.exports = {
   signUp: async (req, res, next) => {
-    const { email, password } = req.value.body;
-
-    // Check if there is a user with the same email
-    let foundUser = await User.findOne({ "local.email": email });
-    if (foundUser) { 
-      return res.status(403).json({ error: 'Email is already in use'});
+    const { email } = req.body;
+    let foundUsers = await Users.findOne({ email: email.trim() });
+    if (foundUsers) {
+      return res.status(400).json({ error: "Email is already in use" });
     }
-
-    // Is there a Google account with the same email?
-    foundUser = await User.findOne({ 
-      $or: [
-        { "google.email": email },
-        { "facebook.email": email },
-      ] 
-    });
-    if (foundUser) {
-      // Let's merge them?
-      foundUser.methods.push('local')
-      foundUser.local = {
-        email: email, 
-        password: password
-      }
-      await foundUser.save()
-      // Generate the token
-      const token = signToken(foundUser);
-      // Respond with token
-      res.cookie('access_token', token, {
-        httpOnly: true
-      });
-      res.status(200).json({ success: true });
-    }
-
-    // Is there a Google account with the same email?
-    // foundUser = await User.findOne({ "facebook.email": email });
-    // if (foundUser) {
-    //   // Let's merge them?
-    //   foundUser.methods.push('local')
-    //   foundUser.local = {
-    //     email: email, 
-    //     password: password
-    //   }
-    //   await foundUser.save()
-    //   // Generate the token
-    //   const token = signToken(foundUser);
-    //   // Respond with token
-    //   res.status(200).json({ token });
-    // }
-    
-    // Create a new user
-    const newUser = new User({ 
-      methods: ['local'],
-      local: {
-        email: email, 
-        password: password
-      }
-    });
-
-    await newUser.save();
-
+    await Referals.findOneAndUpdate(
+      { email: req.body.email }
+    );
+    const cusObj = { ...req.body, role:'customer', createdOn: new Date().getTime() };
+    const newUsers = new Users(cusObj);
+    const userObj = await newUsers.save();
     // Generate the token
-    const token = signToken(newUser);
-    // Send a cookie containing JWT
-    res.cookie('access_token', token, {
-      httpOnly: true
-    });
-    res.status(200).json({ success: true });
+    const token = signToken(newUsers);
+    // console.log("CUSTOMER OBJECT=>", userObj);
+    emailController.signupConfirm(req.body);
+    res.status(200).json({ token, profile: userObj });
+  },
+
+  createEmployee: async (req, res, next) => {
+    if (req.user.role !== "admin") return res.send(403);
+    const { email } = req.body;
+    let foundUsers = await Users.findOne({ email: email.trim() });
+    if (foundUsers) {
+      return res.status(403).json({ error: "Email is already in use" });
+    }
+    const cusObj = {
+      ...req.body,
+      createdOn: new Date().getTime(),
+      role: "employee",
+    };
+    const newUsers = new Users(cusObj);
+    const userObj = await newUsers.save();
+    // Generate the token
+    const token = signToken(newUsers);
+    console.log("CUSTOMER OBJECT=>", userObj);
+    res.status(200).json({ token, profile: userObj });
   },
 
   signIn: async (req, res, next) => {
+    console.log("User Details =>", req.user);
     // Generate token
+    console.log("CUSTOMER SIGN IN =>", req.user);
     const token = signToken(req.user);
-    res.cookie('access_token', token, {
-      httpOnly: true
-    });
-    res.status(200).json({ success: true });
+    // res.setHeader('Authorization', token);
+    res.status(200).json({ token, profile: req.user });
   },
 
   signOut: async (req, res, next) => {
-    res.clearCookie('access_token');
+    res.clearCookie("access_token");
     // console.log('I managed to get here!');
     res.json({ success: true });
   },
 
-  googleOAuth: async (req, res, next) => {
-    // Generate token
-    const token = signToken(req.user);
-    res.cookie('access_token', token, {
-      httpOnly: true
-    });
-    res.status(200).json({ success: true });
-  },
-
-  linkGoogle: async (req, res, next) => {
-    res.json({ 
-      success: true,
-      methods: req.user.methods, 
-      message: 'Successfully linked account with Google' 
-    });
-  },
-
-  unlinkGoogle: async (req, res, next) => {
-    // Delete Google sub-object
-    if (req.user.google) {
-      req.user.google = undefined
-    }
-    // Remove 'google' from methods array
-    const googleStrPos = req.user.methods.indexOf('google')
-    if (googleStrPos >= 0) {
-      req.user.methods.splice(googleStrPos, 1)
-    }
-    await req.user.save()
-
-    // Return something?
-    res.json({ 
-      success: true,
-      methods: req.user.methods, 
-      message: 'Successfully unlinked account from Google' 
-    });
-  },
-
-  facebookOAuth: async (req, res, next) => {
-    // Generate token
-    const token = signToken(req.user);
-    res.cookie('access_token', token, {
-      httpOnly: true
-    });
-    res.status(200).json({ success: true });
-  },
-
-  linkFacebook: async (req, res, next) => {
-    res.json({ 
-      success: true, 
-      methods: req.user.methods, 
-      message: 'Successfully linked account with Facebook' 
-    });
-  },
-
-  unlinkFacebook: async (req, res, next) => {
-    // Delete Facebook sub-object
-    if (req.user.facebook) {
-      req.user.facebook = undefined
-    }
-    // Remove 'facebook' from methods array
-    const facebookStrPos = req.user.methods.indexOf('facebook')
-    if (facebookStrPos >= 0) {
-      req.user.methods.splice(facebookStrPos, 1)
-    }
-    await req.user.save()
-
-    // Return something?
-    res.json({ 
-      success: true,
-      methods: req.user.methods, 
-      message: 'Successfully unlinked account from Facebook' 
-    });
-  },
-
-  dashboard: async (req, res, next) => {
-    console.log('I managed to get here!');
-    res.json({ 
-      secret: "resource",
-      methods: req.user.methods
-    });
-  },
-
   checkAuth: async (req, res, next) => {
-    console.log('I managed to get here!');
-    res.json({ success: true });
-  }
-}
+    // req.user.id = req.user._id;
+    const token = signToken(req.user);
+    console.log("I managed to get here!");
+    res.json({ token });
+  },
+
+  getUsers: async (req, res, next) => {
+    const findSchema = req.query.role
+      ? {
+          role: req.query.role,
+        }
+      : {};
+    const users = await Users.find(findSchema);
+    res.json(users);
+  },
+
+  updateProfile: async (req, res) => {
+    Users.findOneAndUpdate({ _id: req.user.id }, req.body, (err, response) => {
+      if (err) res.status(400).json({ message: "Error in updating user" });
+      else res.json(response);
+    });
+  },
+
+  addNewAddress: (req, res) => {
+    Users.update(
+      { _id: req.user.id },
+      { $push: { address: req.body } },
+      (err, response) => {
+        if (err)
+          res
+            .status(400)
+            .json({ message: "Error in adding user Address", error: err });
+        else res.json(response);
+      }
+    );
+  },
+
+  removeAddress: (req, res) => {
+    console.log("PARAMS =>", req.params);
+    Users.updateOne(
+      { _id: req.user.id },
+      {
+        $pull: {
+          address: { _id: mongoose.Types.ObjectId(req.params.addressId) },
+        },
+      },
+      (err, response) => {
+        if (err)
+          res
+            .status(400)
+            .json({ message: "Error in Deleting user Address", error: err });
+        else res.json(response);
+      }
+    );
+  },
+
+  updateAddress: (req, res) => {
+    Users.updateOne(
+      { _id: req.user.id, "address.id": req.params.addressId },
+      { $set: { "address[0].name": req.body.name } },
+      (err, response) => {
+        if (err)
+          res
+            .status(400)
+            .json({ message: "Error in adding user Address", error: err });
+        else res.json(response);
+      }
+    );
+  },
+
+  getProfile: async (req, res) => {
+    res.send(req.user);
+  },
+
+  deleteUser: async (req, res) => {
+    Users.findOneAndDelete({ _id: req.params.id }, function (err, response) {
+      if (err) res.json({ message: "Error in deleteting product" });
+      res.json(response);
+    });
+  },
+  changePassword: async (req, res) => {
+    console.log("FIND PASSEORD =>", req.user);
+    const oldpassword = req.body.oldpassword;
+    let findPassword = await Users.findOne({ _id: req.user.id });
+    const hash = findPassword.password;
+    bcrypt.compare(oldpassword, hash, function (err, isMatch) {
+      if (err) {
+        throw err;
+      } else if (!isMatch) {
+        res.status(400).json({ message: "old password is not match" });
+      } else {
+        Users.findOneAndUpdate(
+          { _id: req.user.id },
+          { password: req.body.newpassword },
+          (err, response) => {
+            if (err)
+              res.status(400).json({ message: "Error in updating customer" });
+            else res.json({ message: "success" });
+          }
+        );
+      }
+    });
+  },
+  otpGenerate: async (req, res) => {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    let foundUsers = await Users.findOne({ email: req.body.email.trim() });
+    if (!foundUsers) {
+      return res.status(403).json({ message: "Email does not exit" });
+    }
+    Users.findOneAndUpdate(
+      { email: req.body.email },
+      { otp: otp },
+      (err, response) => {
+        if (err) res.status(400).json({ message: "Error in updating otp" });
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "20perorder@gmail.com",
+            pass: "tqjpnurkijsnfjxs",
+          },
+        });
+        const mailOptions = {
+          from: "20perorder@gmail.com",
+          to: req.body.email,
+          subject: "Forgot Password",
+          text: `your otp is ${otp}`,
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log("ERROR", error);
+            res.status(400).json({ message: "Error", error });
+          } else {
+            console.log("Email sent: " + info.response);
+            res.json(info.response);
+          }
+        });
+        res.json({message: 'OTP Sent'});
+      }
+    );
+  },
+  checkOtp: async (req, res) => {
+    Users.findOne(
+      { email: req.body.email, otp: req.body.otp },
+      (err, response) => {
+        if (err) res.status(400).json({ message: "Error in updating otp" });
+        else {
+          if (!response) {
+            res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1  });
+            Users.findOneAndUpdate(
+              { email: req.body.email },
+              { otp: "", failures: response.failures + 1 },
+              (err, response) => {}
+            );
+          } else {
+            Users.findOneAndUpdate(
+              { email: req.body.email },
+              { otp: "", failures: 0 },
+              (err, response) => {}
+            );
+            res.send({ success: true });
+          }
+        }
+      }
+    );
+  },
+  updateNewPassword: async (req, res) => {
+    let foundUsers = await Users.findOne({ email: req.body.email.trim() });
+    if (!foundUsers) {
+      return res.status(403).json({ error: "Email is not exit" });
+    }
+    Users.findOneAndUpdate(
+      { email: req.body.email },
+      { password: req.body.newpassword },
+      (err, response) => {
+        const token = signToken(Users);
+        if (err)
+          res.status(400).json({ message: "Error in updating customer" });
+        else res.json({ token, profile: req.user });
+      }
+    );
+  },
+};

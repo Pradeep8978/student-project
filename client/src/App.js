@@ -23,7 +23,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import {Provider} from 'react-redux';
 import store from './store';
 import AdminLayout from "layouts/Admin.js";
-import LoginPage from "./containers/auth/Login";
+// import LoginPage from "./containers/auth/Login";
 import RegisterPage from "./containers/auth/Register";
 import Header from "./components/Header/Header";
 
@@ -56,11 +56,11 @@ const App = () => {
     <Provider store={store}>
       {/* <Header/> */}
     <Switch>
-    <PrivateRoute exact path="/login" component={LoginPage}/>
+    {/* <PrivateRoute exact path="/login" component={LoginPage}/> */}
     <PrivateRoute exact path="/register" component={RegisterPage}/>
 
-      <PrivateRoute path="/admin" component={AdminLayout} />
-      {/* <Redirect to="/admin/dashboard" /> */}
+      <Route path="/admin" component={AdminLayout} />
+      <Redirect to="/admin/dashboard" />
     </Switch>
     </Provider>
   </Router>)}
