@@ -41,7 +41,7 @@ const LoginPage = ({ location }) => {
       const bodyParams = { email: values.email, password: values.password };
       dispatch(loginUser(bodyParams)).then((res) => {
         localStorage.setItem("token", res.data.token);
-        history.push("/dashboard");
+        history.push("/admin/dashboard");
         dispatch(fetchUserProfile());
       });
     }

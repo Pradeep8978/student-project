@@ -20,7 +20,6 @@ const validationSchema = Yup.lazy(() => {
   return Yup.object().shape({
     firstName: Yup.string().required("Required"),
     lastName: Yup.string().required("Required"),
-    userId: Yup.string().required("Required"),
     password: Yup.string()
       .required("Required")
       .matches(
@@ -38,7 +37,6 @@ const Register = () => {
   const initialValues = {
     firstName: "",
     lastName: "",
-    userId: "",
     password: "",
     phone: "",
     email: "",
@@ -53,7 +51,6 @@ const Register = () => {
     const bodyParams = {
       firstName: values.firstName,
       lastName: values.lastName,
-      userId: values.userId,
       password: values.password,
       phone: values.phone,
       email: values.email,
@@ -65,7 +62,7 @@ const Register = () => {
     Axios.post(url, bodyParams)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
-        history.push("/dashboard");
+        history.push("/admin/dashboard");
         setLoading(false);
         dispatchAction(fetchUserProfile());
       })
@@ -116,19 +113,6 @@ const Register = () => {
                     className="input"
                   />
                   <ErrorMsg name="lastName" />
-                </div>
-                <div className="group">
-                  <label for="userid" className="label">
-                    User Id
-              </label>
-                  <Field
-                    component={FormikInput}
-                    name="userId"
-                    type="text"
-                    className="input"
-                  />
-                  <ErrorMsg name="userId" />
-
                 </div>
                 <div className="group">
                   <label for="pass" className="label">
