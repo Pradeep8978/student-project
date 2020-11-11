@@ -1,7 +1,7 @@
 import * as types from './../constants/types';
 import Axios from 'axios'
 
-export const clearLoadErrorState = () => ({
+export const clearLoadingState = () => ({
     type: types.CLEAR_LOADING_STATE
 })
 

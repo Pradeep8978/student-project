@@ -18,26 +18,31 @@ const ErrorMsg = (props) => (
 
 const validationSchema = Yup.lazy(() => {
   return Yup.object().shape({
-    name: Yup.string().required("Required"),
-    email: Yup.string().email("Invalid email").required("Required"),
-    phone: Yup.string().min(10, "Number should be 10 digits").required("Required"),
+    firstName: Yup.string().required("Required"),
+    lastName: Yup.string().required("Required"),
+    userId: Yup.string().required("Required"),
     password: Yup.string()
       .required("Required")
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         "Password must contain minmum 8 letters with atleast one letter, number and special character"
       ),
-    confirmpassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords must match"),
+    phone: Yup.string().min(10, "Number should be 10 digits").required("Required"),
+    email: Yup.string().email("Invalid email").required("Required"),
+    gender: Yup.string().required("Required"),
+
   });
 });
 
 const Register = () => {
   const initialValues = {
-    name: "",
-    email: "",
-    phone: "",
+    firstName: "",
+    lastName: "",
+    userId: "",
     password: "",
-    confirmpassword: "",
+    phone: "",
+    email: "",
+    gender: ""
   };
   const [error, SetError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,17 +51,21 @@ const Register = () => {
 
   const onSubmit = (values) => {
     const bodyParams = {
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      userId: values.userId,
       password: values.password,
+      phone: values.phone,
+      email: values.email,
+      gender: values.gender
     };
+    console.log("values===========>", values)
     const url = "/users/signup";
     setLoading(true);
     Axios.post(url, bodyParams)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
-        history.push("/");
+        history.push("/dashboard");
         setLoading(false);
         dispatchAction(fetchUserProfile());
       })
@@ -73,52 +82,137 @@ const Register = () => {
   return (
     <Fragment>
       {error && renderError()}
-      <div className="login-form-container bg-white">
-        <div className="login-register-form">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-            render={(formikProps) => {
-              const { errors } = formikProps;
-              console.log("ERRORW =>", errors);
-              return (
-                <Form>
-                  <Field component={FormikInput} type="text" name="name" placeholder="Full Name" />
-                  <ErrorMsg name="name" />
-                  <Field component={FormikInput} type="email" name="email" placeholder="Email" />
-                  <ErrorMsg name="email" />
+      <div className="sign-up-htm">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+          render={(formikProps) => {
+            const { errors } = formikProps;
+            console.log("ERRORW =>", errors);
+            return (
+              <Form>
+                <div className="group">
+                  <label for="firstname" className="label">
+                    First Name
+              </label>
                   <Field
                     component={FormikInput}
+                    name="firstName"
                     type="text"
-                    name="phone"
-                    placeholder="Phone Number"
+                    className="input"
                   />
-                  <ErrorMsg name="phone" />
+                  <ErrorMsg name="firstName" />
+                </div>
+
+                <div className="group">
+                  <label for="lastname" className="label">
+                    Last Name
+              </label>
                   <Field
                     component={FormikInput}
-                    type="password"
+                    name="lastName"
+                    type="text"
+                    className="input"
+                  />
+                  <ErrorMsg name="lastName" />
+                </div>
+                <div className="group">
+                  <label for="userid" className="label">
+                    User Id
+              </label>
+                  <Field
+                    component={FormikInput}
+                    name="userId"
+                    type="text"
+                    className="input"
+                  />
+                  <ErrorMsg name="userId" />
+
+                </div>
+                <div className="group">
+                  <label for="pass" className="label">
+                    Password
+              </label>
+                  <Field
+                    component={FormikInput}
                     name="password"
-                    placeholder="Password (Minimum 8 characters)"
+                    type="password"
+                    className="input"
+                    data-type="password"
                   />
                   <ErrorMsg name="password" />
+                </div>
+
+                <div className="group">
+                  <label for="mobilenumber" className="label">
+                    Mobile Number
+              </label>
                   <Field
                     component={FormikInput}
-                    type="password"
-                    name="confirmpassword"
-                    placeholder="Confirm Password"
+                    name="phone"
+                    type="text"
+                    className="input"
                   />
-                  <ErrorMsg name="confirmpassword" />
-                  <div className="button-box">
-                    <button type="submit">
-                      {loading ? <span>Please wait...</span> : <span>Register</span>}
-                    </button>
+                  <ErrorMsg name="phone" />
+                </div>
+                <div className="group">
+                  <label for="email" className="label">
+                    Email Id
+              </label>
+                  <Field
+                    component={FormikInput}
+                    name="email"
+                    type="text"
+                    className="input"
+                  />
+                  <ErrorMsg name="email" />
+                </div>
+
+                <div className="group pl-2">
+                  <div className="row">
+                    <div md="col-6">
+                      <div>
+                        <label for="gender" className="label">
+                          Gender
+              </label>
+                      </div >
+                    </div>
+                    <div className="col-6">
+                      <div>
+                        <Field
+                          name="gender"
+                          value="male"
+                          type="radio"
+                          className="p-1"
+                        />
+                        <span className="pr-4"> Male</span>
+                      </div>
+                      <div >
+                        <Field
+                          name="gender"
+                          value="female"
+                          type="radio"
+                          className="radio"
+                        />
+                        <span className="pr-4"> Female</span>
+
+                      </div>
+                    </div>
                   </div>
-                </Form>
-              );
-            }}
-          />
-        </div>
+                  <ErrorMsg name="gender" />
+                </div>
+                <div className="group">
+                  <Field type="submit" className="button" value={loading ? " Please wait..." : "Sign Up"} />
+                </div>
+                <div className="hr"></div>
+                <div className="foot-lnk">
+                  <label for="tab-1">Already Member?</label>
+                </div>
+              </Form>
+            );
+          }}
+        />
       </div>
     </Fragment>
   );

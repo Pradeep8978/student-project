@@ -52,17 +52,19 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 const App = () => {
-  return (<Router history={hist}>
+  return (
     <Provider store={store}>
+  <Router history={hist}>
       {/* <Header/> */}
     <Switch>
-    <PrivateRoute exact path="/login" component={LoginPage}/>
-    <PrivateRoute exact path="/register" component={RegisterPage}/>
+    {/* <Route exact path="/login" component={LoginPage}/> */}
+    {/* <PrivateRoute exact path="/register" component={RegisterPage}/> */}
 
-      <PrivateRoute path="/admin" component={AdminLayout} />
-      {/* <Redirect to="/admin/dashboard" /> */}
+      <Route path="/admin" component={AdminLayout} />
+      <Redirect to="/admin/dashboard" />
     </Switch>
-    </Provider>
-  </Router>)}
+  </Router>
+  </Provider>
+  )}
 
 export default App;
