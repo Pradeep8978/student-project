@@ -2,7 +2,11 @@ const router = require('express-promise-router')();
 // const axios = require('axios')
 var path = require('path')
 const multer = require('multer');
+const uploadController = require('./../controllers/uploads')
 // SET STORAGE
+const passport = require("passport");
+const passportJWT = passport.authenticate("jwt", { session: false });
+
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,6 +27,13 @@ router.post('/upload',upload.single('file'),function(req, res, next) {
   }
   res.json({ fileUrl: req.get('host') + "/" + req.file.path});
 })
+
+
+router.route('/create')
+  .post(passportJWT, uploadController.createUpload);
+router.route('/list')
+  .get(passportJWT,uploadController.getUpload);
+
 
 // router.route('/image/upload')
 //   .post(upload.single('resume'), (req, res, next) => {
