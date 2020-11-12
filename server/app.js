@@ -51,6 +51,7 @@ app.use("/users", require("./routes/users"));
 app.use("/referals", require("./routes/referals"));
 app.use("/images", require("./routes/images"))
 app.use("/emails", require("./routes/emails"))
+app.use("/files", require("./routes/fileupload"))
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
