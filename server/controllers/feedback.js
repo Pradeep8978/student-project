@@ -7,7 +7,7 @@ const { JWT_SECRET } = require('../configuration');
 module.exports = {
     createFeedback: async (req, res) => {        
     Customers.findOne({_id:req.user.id}, function(err, result) {
-      const customerFeedBack  = {...req.body, feedBackOn: new Date().getTime(),customerId:req.user.id,customerName:result.name,customerImage:result.image};
+      const customerFeedBack  = {...req.body};
       const newCustomerFeedback = new Feedback(customerFeedBack); 
       newCustomerFeedback.save(function (err, feedBackdetails){
         if (err){
