@@ -31,12 +31,12 @@ const hist = createBrowserHistory();
 
 function PrivateRoute({ component: Component, ...rest }) {
   console.log(store.getState())
-  const { isAuthenticated } = store.getState().auth;
+  const { token } = store.getState().auth;
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        isAuthenticated ? (
+      token ? (
           <Component {...rest}/>
         ) : (
           <Redirect

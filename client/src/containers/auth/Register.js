@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
-import Axios from "axios";
-import { fetchUserProfile } from "../../actions/auth.actions";
+import Axios from "../../api/index";
+import { fetchUserProfile, signupSuccess, setAuthHeader } from "../../actions/auth.actions";
 
 const FormikInput = ({ field, form, ...props }) => {
   return <input {...field} {...form} {...props} />;
@@ -62,11 +62,14 @@ const Register = () => {
     Axios.post(url, bodyParams)
       .then((res) => {
         localStorage.setItem("token", res.data.token);
+        dispatchAction(signupSuccess(res.data))
+        // dispatchAction(setAuthHeader(res.data.token))
         history.push("/admin/dashboard");
         setLoading(false);
         dispatchAction(fetchUserProfile());
       })
       .catch((error) => {
+        console.log("error?.response.data.message===>",error?.response.data.message)
         SetError(error?.response.data.message);
         setLoading(false);
       });

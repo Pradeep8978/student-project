@@ -18,10 +18,10 @@
 */
 import Dashboard from "views/Dashboard.js";
 import Notifications from "views/Notifications.js";
-import Icons from "views/Icons.js";
+import Mydetails from "views/Mydetails.js";
 import Typography from "views/Typography.js";
 import TableList from "views/Tables.js";
-import Maps from "views/Map.js";
+import Uploadpage from "views/Uploadpage.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
 
@@ -37,14 +37,14 @@ var routes = [
     path: "/mydetails",
     name: "My details",
     icon: "nc-icon nc-diamond",
-    component: Icons,
+    component: Mydetails,
     layout: "/admin",
   },
   {
     path: "/uploadpage",
     name: "Upload Page",
     icon: "nc-icon nc-pin-3",
-    component: Maps,
+    component: Uploadpage,
     layout: "/admin",
   },
   {

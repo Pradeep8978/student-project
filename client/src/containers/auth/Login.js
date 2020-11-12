@@ -36,15 +36,15 @@ const LoginPage = ({ location }) => {
     dispatch(clearLoadingState());
   }, [dispatch]);
 
-  const onSubmit = (values) => {
-    if (typeof window !== "undefined") {
+  const onSubmit = (values) => { debugger
+    // if (typeof window !== "undefined") {
       const bodyParams = { email: values.email, password: values.password };
       dispatch(loginUser(bodyParams)).then((res) => {
-        localStorage.setItem("token", res.data.token);
+        // localStorage.setItem("token", res.data.token);
         history.push("/admin/dashboard");
         dispatch(fetchUserProfile());
       });
-    }
+    // }
   };
 
   const renderError = () => {

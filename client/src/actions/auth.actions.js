@@ -1,5 +1,5 @@
 import * as types from './../constants/types';
-import Axios from 'axios'
+import Axios from './../api'
 
 export const clearLoadingState = () => ({
     type: types.CLEAR_LOADING_STATE
@@ -9,7 +9,7 @@ const signupLoading = () => ({
     type: types.USER_SIGNUP_LOADING
 });
 
-const signupSuccess = (data) => ({
+export const signupSuccess = (data) => ({
     type: types.USER_SIGNUP_SUCCESS,
     payload: data
 });
@@ -33,7 +33,7 @@ const signinFailure = error => ({
     paylod: error
 });
 
-const setAuthHeader = (token) => {
+export const setAuthHeader = (token) => {
     Axios.defaults.headers.Authorization = token;
     localStorage.setItem('token', token);
 }
@@ -84,7 +84,7 @@ export const signupUser = (bodyParams) => dispatch => {
     })
 }
 
-export const loginUser = (bodyParams) => dispatch => {
+export const loginUser = (bodyParams) => dispatch => { debugger
     dispatch(signinLoading());
     const url = '/users/signin';
     return Axios.post(url, bodyParams)
