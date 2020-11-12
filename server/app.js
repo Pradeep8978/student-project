@@ -51,7 +51,7 @@ app.use("/users", require("./routes/users"));
 app.use("/referals", require("./routes/referals"));
 app.use("/images", require("./routes/images"))
 app.use("/emails", require("./routes/emails"))
-app.use("/files", require("./routes/fileUpload"))
+app.use("/files", require("./routes/uploads"))
 app.use("/feedback", require("./routes/feedback"))
 
 if (process.env.NODE_ENV === 'production') {

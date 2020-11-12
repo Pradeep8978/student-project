@@ -17,7 +17,7 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import Notifications from "views/Notifications.js";
+import Viewuploadocument from "views/Viewuploadocument.js";
 import Mydetails from "views/Mydetails.js";
 import Typography from "views/Typography.js";
 import Feedback from "views/Feedback";
@@ -52,7 +52,7 @@ var routes = [
     path: "/viewupload-docuement",
     name: "View Upload Document",
     icon: "nc-icon nc-bell-55",
-    component: Notifications,
+    component: Viewuploadocument,
     layout: "/admin",
   },
   {
