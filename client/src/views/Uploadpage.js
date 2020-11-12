@@ -103,7 +103,7 @@ const Uploadpage = () => {
     console.log("values===========>", values);
     const bodyParams = {
       ...values,
-      file: fileUrl
+      fileUrl: fileUrl
     }
 
     Axios.post('/files/create', bodyParams)

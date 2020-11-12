@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 // Create a schema
 const uploadSchema = new Schema({
-    fileName : String,
+    name : String,
     fileUrl: String,
     location: String,
     category: String,

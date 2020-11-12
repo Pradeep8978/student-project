@@ -17,7 +17,7 @@ module.exports = {
     },
     getUpload: async (req, res, next) => {
       const filter = req.user.role === 'admin' ? {} : {customer: req.user.id}
-        Upload.find(filter , function (err, response) {
+        Upload.find(filter).populate('customer').exec((err, response) => {
           if (err) res.status(404).send(err);        
             res.json(response);
         });
