@@ -35,7 +35,7 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({storage: storage});
-router.post('/upload',upload.single('file'),function(req, res, next) {
+router.route('/upload').post(upload.single('file'),function(req, res, next) {
   console.log(req.file);
   if(!req.file) {
     res.status(500);

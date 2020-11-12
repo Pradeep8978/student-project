@@ -82,7 +82,7 @@ class Notifications extends React.Component {
       <>
         <div className="content">
           <NotificationAlert ref={this.notificationAlert} />
-          <Row>
+          {/* <Row>
             <Col md="12">
               <Card>
                 <CardHeader>
@@ -201,7 +201,7 @@ class Notifications extends React.Component {
                 </CardBody>
               </Card>
             </Col>
-          </Row>
+          </Row> */}
           <Row>
             <Col md="12">
               <Card>
@@ -216,7 +216,7 @@ class Notifications extends React.Component {
                     <Row>
                       <Col className="ml-auto mr-auto" lg="8">
                         <Row>
-                          <Col md="4">
+                          {/* <Col md="4">
                             <Button
                               block
                               color="primary"
@@ -233,7 +233,7 @@ class Notifications extends React.Component {
                             >
                               Top Center
                             </Button>
-                          </Col>
+                          </Col> */}
                           <Col md="4">
                             <Button
                               block
@@ -246,7 +246,7 @@ class Notifications extends React.Component {
                         </Row>
                       </Col>
                     </Row>
-                    <Row>
+                    {/* <Row>
                       <Col className="ml-auto mr-auto" lg="8">
                         <Row>
                           <Col md="4">
@@ -278,7 +278,7 @@ class Notifications extends React.Component {
                           </Col>
                         </Row>
                       </Col>
-                    </Row>
+                    </Row> */}
                   </div>
                 </CardBody>
               </Card>

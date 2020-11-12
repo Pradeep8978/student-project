@@ -20,7 +20,7 @@ import Dashboard from "views/Dashboard.js";
 import Notifications from "views/Notifications.js";
 import Mydetails from "views/Mydetails.js";
 import Typography from "views/Typography.js";
-import TableList from "views/Tables.js";
+import Feedback from "views/Feedback";
 import Uploadpage from "views/Uploadpage.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
@@ -65,7 +65,7 @@ var routes = [
     path: "/feedback",
     name: "Feedback",
     icon: "nc-icon nc-tile-56",
-    component: TableList,
+    component: Feedback,
     layout: "/admin",
   },
   {

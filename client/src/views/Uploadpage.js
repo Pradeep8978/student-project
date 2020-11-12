@@ -57,27 +57,28 @@ const Uploadpage = () => {
   const [file, setFile] = useState([]);
   const [error,setError] = useState(null)
 
-  // const handleUploader = (files) => {
-  //   setUploadLoading(true);
-  //   const url = "/images/upload";
-  //   var bodyFormData = new FormData();
-  //   bodyFormData.append("image", files[0]);
-  //   Axios.post(url, bodyFormData, {
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //   })
-  //     .then((res) => {
-  //       setUploadLoading(false);
-  //       setFile(res.data);
-  //     })
-  //     .catch((err) => {
-  //       setUploadLoading(false);
-  //      setError(
-  //         err.response.data.message ||
-  //         "Sorry.. Image not uploaded! Please Check your internet connection",
-  //         {}
-  //       );
-  //     });
-  // };
+  const handleUploader = (files) => { debugger
+    setUploadLoading(true);
+    const url = "/files/upload";
+    var bodyFormData = new FormData();
+    setFile("");
+    bodyFormData.append("file", files[0]);
+    Axios.post(url, bodyFormData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then((res) => {
+        setUploadLoading(false);
+        setFile(res.data);
+      })
+      .catch((err) => {
+        setUploadLoading(false);
+       setError(
+          err.response.data.message ||
+          "Sorry.. Image not uploaded! Please Check your internet connection",
+          {}
+        );
+      });
+  };
 
 
   const onSubmit = (values) => {
@@ -152,7 +153,7 @@ const Uploadpage = () => {
                                 type="file"
                                 className="form-control"
                                 placeholder="Upload File"
-                                // onChange={handleUploader}
+                                onChange={handleUploader}
                               />
                               <ErrorMsg name="file" />
                             </div>
