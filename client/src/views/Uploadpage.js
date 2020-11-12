@@ -22,10 +22,12 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
-import Axios from "../api/index";
+import Axios from "../api";
 import "../containers/auth/Auth.scss";
+import NotificationAlert from "react-notification-alert";
 
-const CATEGORY_TYPES = ["IT Asset", "Business Details", "Personal Details"];
+
+const CATEGORY_TYPES = ["", "IT Asset", "Business Details", "Personal Details"];
 
 const FormikInput = ({ field, form, ...props }) => {
   return <input {...field} {...form} {...props} />;
@@ -40,7 +42,7 @@ const ErrorMsg = (props) => (
 const uploadPageSchema = Yup.object().shape({
   filename: Yup.string().required("Required"),
   category: Yup.string().required("Required"),
-  file: Yup.string().required("Required"),
+  // file: Yup.string().required("Required"),
   location: Yup.string().required("Required"),
 });
 
@@ -53,14 +55,15 @@ const Uploadpage = () => {
   };
 
   const [uploadLoading, setUploadLoading] = useState(false);
-  const [file, setFile] = useState([]);
+  const [fileUrl, setFile] = useState('');
   const [error, setError] = useState(null);
+  const notificationAlert = React.createRef();
 
-  const handleUploader = (files) => {
+  const handleUploader = (e) => {debugger
     setUploadLoading(true);
-    const url = "/images/upload";
+    const url = "/files/upload";
     var bodyFormData = new FormData();
-    bodyFormData.append("image", files[0]);
+    bodyFormData.append("file", e.target.files[0]);
     Axios.post(url, bodyFormData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
@@ -78,8 +81,39 @@ const Uploadpage = () => {
       });
   };
 
-  const onSubmit = (values) => {
+  const sendNotification = (type, message) => {
+    var options = {};
+    options = {
+      place: 'tr',
+      message: (
+        <div>
+          <div>
+           {message}
+          </div>
+        </div>
+      ),
+      type: type,
+      icon: "nc-icon nc-bell-55",
+      autoDismiss: 7,
+    };
+    notificationAlert.current.notificationAlert(options);
+  }
+
+  const onSubmit = (values, {resetForm}) => {
     console.log("values===========>", values);
+    const bodyParams = {
+      ...values,
+      file: fileUrl
+    }
+
+    Axios.post('/files/create', bodyParams)
+    .then(res => {
+      sendNotification('success', 'Successfully posted file information');
+      resetForm();
+    })
+    .catch(err => {
+      sendNotification('danger', 'Sorry Something went wrong please try later..')
+    })
 
     debugger;
   };
@@ -91,6 +125,7 @@ const Uploadpage = () => {
   return (
     <>
       <div className="content">
+          <NotificationAlert ref={notificationAlert} />
         <Row>
           <Col md="10">
             <Card>
@@ -161,6 +196,8 @@ const Uploadpage = () => {
                                 onChange={handleUploader}
                               />
                               <ErrorMsg name="file" />
+                             
+                              {/* {file} */}
                             </div>
                           </Col>
                         </Row>
