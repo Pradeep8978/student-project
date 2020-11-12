@@ -6,7 +6,6 @@ const Schema = mongoose.Schema;
 const feedbackSchema = new Schema({
     message : String,
     customer:{ type: Schema.Types.ObjectId, ref: "users" }
-
 });
 // Create a model
 const Feedback = mongoose.model('feedback', feedbackSchema,'feedback');

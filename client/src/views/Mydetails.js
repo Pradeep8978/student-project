@@ -21,6 +21,17 @@ import { useSelector, useDispatch } from 'react-redux'
 // reactstrap components
 import { Card, CardHeader, CardBody, CardTitle, Row, Col } from "reactstrap";
 
+const genderOptions = {
+  male:"Male",
+  female:"Female"
+}
+
+const roleOptions = {
+  admin:"Admin",
+  customer:"Customer"
+
+}
+
 const Mydetails = () => {
   let isLoading = useSelector((state) => state.auth.loading);
   let error = useSelector((state) => state.auth.error);
@@ -73,7 +84,16 @@ const Mydetails = () => {
                     <p>Gender</p>
                   </Col>
                   <Col md="6">
-                    <p>{profile?.gender}</p>
+                    <p>{genderOptions[profile?.gender]}</p>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col md="6">
+                    <p>Role</p>
+                  </Col>
+                  <Col md="6">
+                    <p>{roleOptions[profile?.role]}</p>
                   </Col>
                 </Row>
               </CardBody>

@@ -21,6 +21,7 @@ import Notifications from "views/Notifications.js";
 import Mydetails from "views/Mydetails.js";
 import Typography from "views/Typography.js";
 import Feedback from "views/Feedback";
+import Viewfeedback from "views/Feedbacklist";
 import Uploadpage from "views/Uploadpage.js";
 import UserPage from "views/User.js";
 import UpgradeToPro from "views/Upgrade.js";
@@ -66,6 +67,13 @@ var routes = [
     name: "Feedback",
     icon: "nc-icon nc-tile-56",
     component: Feedback,
+    layout: "/admin",
+  },
+  {
+    path: "/viewfeedback",
+    name: "View feedback",
+    icon: "nc-icon nc-tile-56",
+    component: Viewfeedback,
     layout: "/admin",
   },
   {

@@ -1,14 +1,8 @@
-const JWT = require('jsonwebtoken');
 const Feedback = require('../models/feedback');
-const Customers = require('../models/customers');
-
-const { JWT_SECRET } = require('../configuration');
 
 module.exports = {
     createFeedback: async (req, res) => {        
-    Customers.findOne({_id:req.user.id}, function(err, result) {
-      const customerFeedBack  = {...req.body};
-      const newCustomerFeedback = new Feedback(customerFeedBack); 
+      const newCustomerFeedback = new Feedback({...req.body, customer: req.user.id}); 
       newCustomerFeedback.save(function (err, feedBackdetails){
         if (err){
           req.status(405).send(err);
@@ -18,10 +12,9 @@ module.exports = {
           res.status(200).json(feedBackdetails);
         }
       });
-    });
     },
     getFeedback: async (req, res, next) => {
-        Feedback.find({} , function (err, response) {
+        Feedback.find({}).populate('customer').exec((err, response) => {
           if (err) res.status(404).send(err);        
             res.json(response);
         });

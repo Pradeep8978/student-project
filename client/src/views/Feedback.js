@@ -16,11 +16,13 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Axios from "../api/index"
 import NotificationAlert from "react-notification-alert";
+import {fetchFeeback} from "../actions/feedback.actions"
 
 import "../containers/auth/Auth.scss"
 
@@ -44,23 +46,53 @@ const ErrorMsg = (props) => (
 );
 
 const feedBackSchema = Yup.object().shape({
-  feedback: Yup.string().required("Required"),
+  message: Yup.string().required("Required"),
 
 });
 
 const Feedback = () => {
 
   const initialValues = {
-    feedback: ""
+    message: ""
   };
 
   const [loading, setLoading] = useState(false);
   const [succesNotification, setSuccesNotification] = useState("")
   const [errorNotification, setErrorNotification] = useState("")
 
+  const dispatch = useDispatch();
 
 
-  // let notificationAlert = React.createRef();
+  useEffect(() => {
+    dispatch(fetchFeeback())
+  },[])
+
+  const onSubmit = (values) => { 
+    console.log("values===========>", values)
+    // notify("tr")
+    // setSuccesNotification("Succesfully")
+    let url = "/feedback/create";
+    setLoading(true);
+    Axios.post(url, values)
+      .then((res) => {
+        // notify("tr")
+        setSuccesNotification("Succesfully")
+        setLoading(false);
+        dispatch(fetchFeeback())
+        return res;
+
+      })
+      .catch((err) => {
+        // notify("tr")
+        setErrorNotification(
+          "Sorry.. something happened! Please try later"
+        );
+        setLoading(false);
+      });
+
+  };
+
+  // var notificationAlert = React.createRef();
   // const notify = (place) => {
   //   var color = Math.floor(Math.random() * 5 + 1);
   //   var type;
@@ -89,8 +121,8 @@ const Feedback = () => {
   //     message: (
   //       <div>
   //         <div>
-  //          {succesNotification && succesNotification.length >0 ? succesNotification : null}
-  //          {errorNotification && errorNotification.length>0 ? errorNotification : null}
+  //          {succesNotification && succesNotification}
+  //          {errorNotification && errorNotification}
   //         </div>
   //       </div>
   //     ),
@@ -100,31 +132,6 @@ const Feedback = () => {
   //   };
   //   notificationAlert.current.notificationAlert(options);
   // }
-
-  const onSubmit = (values) => { debugger
-    console.log("values===========>", values)
-
-    let url = "/feedback/create";
-    setLoading(true);
-    Axios.post(url, values)
-      .then((res) => {
-        // dispatchAction(fetchAuthors());
-        console.log("res===>", res.data)
-        // toaster.positive(res.data.message, {});
-        // notify("tr")
-        setSuccesNotification(res.data.message)
-        setLoading(false);
-
-      })
-      .catch((err) => {
-        // notify("tr")
-        setErrorNotification(
-          err.response.data.message || "Sorry.. something happened! Please try later"
-        );
-        setLoading(false);
-      });
-
-  };
  
   return (
     <>
@@ -152,12 +159,12 @@ const Feedback = () => {
                             <div className="form-group">
                               <Field
                                 component={FormikInput}
-                                name="feedback"
+                                name="message"
                                 type="text"
                                 className="form-control"
                                 placeholder="Feed back..."
                               />
-                              <ErrorMsg name="feedback" />
+                              <ErrorMsg name="message" />
                             </div>
                           </Col>
                         </Row>
@@ -176,6 +183,7 @@ const Feedback = () => {
             </Card>
           </Col>
         </Row>
+      
       </div>
     </>
   );
