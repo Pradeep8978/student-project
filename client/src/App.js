@@ -61,7 +61,7 @@ const App = () => {
     <PrivateRoute exact path="/register" component={RegisterPage}/>
 
       <PrivateRoute path="/admin" component={AdminLayout} />
-      {/* <Redirect to="/admin/dashboard" /> */}
+      <Redirect to="/admin/dashboard" />
     </Switch>
   </BrowserRouter>
   </Provider>
