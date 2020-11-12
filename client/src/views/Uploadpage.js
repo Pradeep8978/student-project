@@ -16,15 +16,16 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React,{useState} from "react";
+import React, { useState } from "react";
 // react plugin used to create google maps
 // reactstrap components
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
-import Axios from "../api/index"
-import "../containers/auth/Auth.scss"
+import Axios from "../api/index";
+import "../containers/auth/Auth.scss";
 
+const CATEGORY_TYPES = ["IT Asset", "Business Details", "Personal Details"];
 
 const FormikInput = ({ field, form, ...props }) => {
   return <input {...field} {...form} {...props} />;
@@ -40,49 +41,47 @@ const uploadPageSchema = Yup.object().shape({
   filename: Yup.string().required("Required"),
   category: Yup.string().required("Required"),
   file: Yup.string().required("Required"),
-  location: Yup.string().required("Required")
+  location: Yup.string().required("Required"),
 });
 
-
 const Uploadpage = () => {
-
   const initialValues = {
     filename: "",
     category: "",
     file: "",
-    location: ""
+    location: "",
   };
 
   const [uploadLoading, setUploadLoading] = useState(false);
   const [file, setFile] = useState([]);
-  const [error,setError] = useState(null)
+  const [error, setError] = useState(null);
 
-  // const handleUploader = (files) => {
-  //   setUploadLoading(true);
-  //   const url = "/images/upload";
-  //   var bodyFormData = new FormData();
-  //   bodyFormData.append("image", files[0]);
-  //   Axios.post(url, bodyFormData, {
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //   })
-  //     .then((res) => {
-  //       setUploadLoading(false);
-  //       setFile(res.data);
-  //     })
-  //     .catch((err) => {
-  //       setUploadLoading(false);
-  //      setError(
-  //         err.response.data.message ||
-  //         "Sorry.. Image not uploaded! Please Check your internet connection",
-  //         {}
-  //       );
-  //     });
-  // };
-
+  const handleUploader = (files) => {
+    setUploadLoading(true);
+    const url = "/images/upload";
+    var bodyFormData = new FormData();
+    bodyFormData.append("image", files[0]);
+    Axios.post(url, bodyFormData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then((res) => {
+        setUploadLoading(false);
+        setFile(res.data);
+      })
+      .catch((err) => {
+        setUploadLoading(false);
+        setError(
+          err.response.data.message ||
+            "Sorry.. Image not uploaded! Please Check your internet connection",
+          {}
+        );
+      });
+  };
 
   const onSubmit = (values) => {
-    console.log("values===========>", values)
-   
+    console.log("values===========>", values);
+
+    debugger;
   };
 
   // const renderError = () => {
@@ -130,11 +129,18 @@ const Uploadpage = () => {
                           <Col md="6">
                             <div className="form-group">
                               <Field
-                                component={FormikInput}
+                                // component={FormikInput}
+                                as="select"
                                 name="category"
                                 className="form-control"
                                 placeholder="Category"
-                              />
+                              >
+                                {CATEGORY_TYPES.map((item) => (
+                                  <option key={item} value={item}>
+                                    {item}
+                                  </option>
+                                ))}
+                              </Field>
                               <ErrorMsg name="category" />
                             </div>
                           </Col>
@@ -152,7 +158,7 @@ const Uploadpage = () => {
                                 type="file"
                                 className="form-control"
                                 placeholder="Upload File"
-                                // onChange={handleUploader}
+                                onChange={handleUploader}
                               />
                               <ErrorMsg name="file" />
                             </div>
@@ -179,11 +185,15 @@ const Uploadpage = () => {
                         <Row>
                           <Col md="6"></Col>
                           <Col md="6">
-                            <input type="submit" className="btn btn-primary" value="Submit" />
+                            <input
+                              type="submit"
+                              className="btn btn-primary"
+                              value="Submit"
+                            />
                           </Col>
                         </Row>
                       </Form>
-                    )
+                    );
                   }}
                 />
               </CardBody>
@@ -193,6 +203,6 @@ const Uploadpage = () => {
       </div>
     </>
   );
-}
+};
 
 export default Uploadpage;
