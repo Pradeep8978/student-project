@@ -19,11 +19,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 import {Provider} from 'react-redux';
 import store from './store';
 import AdminLayout from "layouts/Admin.js";
-// import LoginPage from "./containers/auth/Login";
+import LoginPage from "./containers/auth/Login";
 import RegisterPage from "./containers/auth/Register";
 import Header from "./components/Header/Header";
 
@@ -31,12 +31,12 @@ const hist = createBrowserHistory();
 
 function PrivateRoute({ component: Component, ...rest }) {
   console.log(store.getState())
-  const { isAuthenticated } = store.getState().auth;
+  const { token } = store.getState().auth;
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        isAuthenticated ? (
+      token ? (
           <Component {...rest}/>
         ) : (
           <Redirect
@@ -52,17 +52,19 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 const App = () => {
-  return (<Router history={hist}>
+  return (
     <Provider store={store}>
+  <BrowserRouter history={hist}>
       {/* <Header/> */}
     <Switch>
-    {/* <PrivateRoute exact path="/login" component={LoginPage}/> */}
+    <Route exact path="/login" component={LoginPage}/>
     <PrivateRoute exact path="/register" component={RegisterPage}/>
 
-      <Route path="/admin" component={AdminLayout} />
-      <Redirect to="/admin/dashboard" />
+      <PrivateRoute path="/admin" component={AdminLayout} />
+      {/* <Redirect to="/admin/dashboard" /> */}
     </Switch>
-    </Provider>
-  </Router>)}
+  </BrowserRouter>
+  </Provider>
+  )}
 
 export default App;

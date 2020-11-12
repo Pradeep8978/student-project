@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { loginUser, fetchUserProfile, clearLoadingState } from "../../actions/auth.actions";
+import Register from "./Register"
 import "./Auth.scss";
 
 const FormikInput = ({ field, form, ...props }) => {
@@ -16,7 +22,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Required"),
 });
 
-const LoginPage = () => {
+const LoginPage = ({ location }) => {
 
   const { pathname } = location;
   let isLoading = useSelector((state) => state.auth.loading);
@@ -30,21 +36,21 @@ const LoginPage = () => {
     dispatch(clearLoadingState());
   }, [dispatch]);
 
-  const onSubmit = (values) => {
-    if (typeof window !== "undefined") {
+  const onSubmit = (values) => { debugger
+    // if (typeof window !== "undefined") {
       const bodyParams = { email: values.email, password: values.password };
       dispatch(loginUser(bodyParams)).then((res) => {
-        localStorage.setItem("token", res.data.token);
-        history.push("/");
+        // localStorage.setItem("token", res.data.token);
+        history.push("/admin/dashboard");
         dispatch(fetchUserProfile());
       });
-    }
+    // }
   };
 
   const renderError = () => {
     return <div style={{ color: "red", textAlign: "center" }}>{error}</div>;
   };
-  
+
   return (
     <div className="login-wrap">
       <div className="login-html">
@@ -57,81 +63,74 @@ const LoginPage = () => {
           Sign Up
         </label>
         <div className="login-form">
+          {error && renderError()}
+          {/*  */}
           <div className="sign-in-htm">
-            <div className="group">
-              <label for="user" className="label">
-                Email
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={validationSchema}
+              onSubmit={onSubmit}
+              render={(formikProps) => {
+                const { errors } = formikProps;
+                console.log("ERRORW =>", errors);
+                return (
+                  <Form>
+                    <div className="group">
+                      <label for="user" className="label">
+                        Email
               </label>
-              <input id="user" type="text" className="input" />
-            </div>
-            <div className="group">
-              <label for="pass" className="label">
-                Password
+                      <Field
+                        component={FormikInput}
+                        name="email"
+                        type="text"
+                        className="input"
+                      />
+                      <ErrorMsg name="email" />
+                    </div>
+                    <div className="group">
+                      <label for="pass" className="label">
+                        Password
               </label>
-              <input
-                id="pass"
-                type="password"
-                className="input"
-                data-type="password"
-              />
-            </div>
-            <div className="group">
-              <input id="check" type="checkbox" className="check" checked />
-              <label for="check">
-                <span className="icon"></span> Keep me Signed in
+                      <Field
+                        component={FormikInput}
+                        id="pass"
+                        name="password"
+                        className="input"
+                        data-type="password"
+                      />
+                      <ErrorMsg name="password" />
+                    </div>
+                    <div className="group">
+                      <Field
+                        component={FormikInput}
+                        id="check"
+                        type="checkbox"
+                        className="check"
+                        checked />
+                      <label for="check">
+                        <span className="icon"></span> Keep me Signed in
               </label>
-            </div>
-            <div className="group">
-              <input type="submit" className="button" value="Sign In" />
-            </div>
-            <div className="hr"></div>
-            <div className="foot-lnk">
-              <a href="#forgot">Forgot Password?</a>
-            </div>
+
+                    </div>
+                    <div className="group">
+                      <input type="submit" className="button" value="Sign In" />
+                    </div>
+                    <div className="hr"></div>
+                    <div className="foot-lnk">
+                      <a href="#forgot">Forgot Password?</a>
+                    </div>
+                  </Form>)
+              }}
+            />
+
           </div>
-          <div className="sign-up-htm">
-            <div className="group">
-              <label for="user" className="label">
-                Email
-              </label>
-              <input id="user" type="text" className="input" />
-            </div>
-            <div className="group">
-              <label for="pass" className="label">
-                Password
-              </label>
-              <input
-                id="pass"
-                type="password"
-                className="input"
-                data-type="password"
-              />
-            </div>
-            <div className="group">
-              <label for="pass" className="label">
-                Repeat Password
-              </label>
-              <input
-                id="pass"
-                type="password"
-                className="input"
-                data-type="password"
-              />
-            </div>
-            <div className="group">
-              <label for="pass" className="label">
-                Email Address
-              </label>
-              <input id="pass" type="text" className="input" />
-            </div>
-            <div className="group">
-              <input type="submit" className="button" value="Sign Up" />
-            </div>
-            <div className="hr"></div>
-            <div className="foot-lnk">
-              <label for="tab-1">Already Member?</label>
-            </div>
-          </div>
+          {/*  */}
+          <>
+            <Register />
+          </>
         </div>
       </div>
     </div>

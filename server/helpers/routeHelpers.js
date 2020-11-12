@@ -32,7 +32,7 @@ module.exports = {
       // name: Joi.string().required(),
       firstName: Joi.string().required(),
       lastName: Joi.string().required(),
-      gender: Joi.string().email().required(),
+      gender: Joi.string().required(),
       email: Joi.string().email().required(),
       phone: Joi.number().integer().min(1000000000).max(9999999999).required(),
       password: Joi.string().required(),
