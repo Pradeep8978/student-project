@@ -28,7 +28,6 @@ const LoginPage = ({ location }) => {
   let isLoading = useSelector((state) => state.auth.loading);
   let error = useSelector((state) => state.auth.error);
   let profile = useSelector((state) => state.auth.profile);
-  console.log("profile============>", profile);
   let history = useHistory();
   const dispatch = useDispatch();
 
@@ -116,7 +115,7 @@ const LoginPage = ({ location }) => {
 
                     </div>
                     <div className="group">
-                      <input type="submit" className="button" value="Sign In" />
+                      <input type="submit" className="button" value={isLoading ? " Please wait..." : "Sign In"}   />
                     </div>
                     <div className="hr"></div>
                     <div className="foot-lnk">

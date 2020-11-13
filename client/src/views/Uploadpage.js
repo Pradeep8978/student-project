@@ -21,7 +21,7 @@ import React, { useState } from "react";
 // reactstrap components
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { Card, CardHeader, CardBody, Row, Col } from "reactstrap";
+import { Card, CardBody, Row, Col } from "reactstrap";
 import Axios from "../api";
 import "../containers/auth/Auth.scss";
 import NotificationAlert from "react-notification-alert";
@@ -40,7 +40,7 @@ const ErrorMsg = (props) => (
 );
 
 const uploadPageSchema = Yup.object().shape({
-  filename: Yup.string().required("Required"),
+  name: Yup.string().required("Required"),
   category: Yup.string().required("Required"),
   // file: Yup.string().required("Required"),
   location: Yup.string().required("Required"),
@@ -48,7 +48,7 @@ const uploadPageSchema = Yup.object().shape({
 
 const Uploadpage = () => {
   const initialValues = {
-    filename: "",
+    name: "",
     category: "",
     file: "",
     location: "",
@@ -69,7 +69,7 @@ const Uploadpage = () => {
     })
       .then((res) => {
         setUploadLoading(false);
-        setFile(res.data);
+        setFile(res.data.fileUrl);
       })
       .catch((err) => {
         setUploadLoading(false);
@@ -100,7 +100,6 @@ const Uploadpage = () => {
   }
 
   const onSubmit = (values, {resetForm}) => {
-    console.log("values===========>", values);
     const bodyParams = {
       ...values,
       fileUrl: fileUrl
@@ -148,12 +147,12 @@ const Uploadpage = () => {
                             <div className="form-group">
                               <Field
                                 component={FormikInput}
-                                name="filename"
+                                name="name"
                                 type="text"
                                 className="form-control"
                                 placeholder="File Name..."
                               />
-                              <ErrorMsg name="filename" />
+                              <ErrorMsg name="name" />
                             </div>
                           </Col>
                         </Row>

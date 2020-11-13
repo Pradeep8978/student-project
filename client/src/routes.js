@@ -23,7 +23,7 @@ import Typography from "views/Typography.js";
 import Feedback from "views/Feedback";
 import Viewfeedback from "views/Feedbacklist";
 import Uploadpage from "views/Uploadpage.js";
-import UserPage from "views/User.js";
+import Downloadrequestpage from "views/Downloadrequestpage.js";
 import UpgradeToPro from "views/Upgrade.js";
 
 var routes = [
@@ -59,7 +59,7 @@ var routes = [
     path: "/download-request-page",
     name: "Download Request Page",
     icon: "nc-icon nc-single-02",
-    component: UserPage,
+    component: Downloadrequestpage,
     layout: "/admin",
   },
   {
@@ -76,13 +76,13 @@ var routes = [
     component: Viewfeedback,
     layout: "/admin",
   },
-  {
-    path: "/logout",
-    name: "Logout",
-    icon: "nc-icon nc-caps-small",
-    component: Typography,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/logout",
+  //   name: "Logout",
+  //   icon: "nc-icon nc-caps-small",
+  //   component: Typography,
+  //   layout: "/admin",
+  // },
   // {
   //   pro: true,
   //   path: "/upgrade",

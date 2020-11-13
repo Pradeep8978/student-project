@@ -5,9 +5,9 @@ module.exports = {
     createUpload: async (req, res) => {        
       const customerFeedBack  = {...req.body, customer: req.user.id};
       const newCustomerUpload = new Upload(customerFeedBack); 
-      newCustomerUpload.save(function (err, feedBackdetails){
+      newCustomerUpload.save((err, feedBackdetails) => {
         if (err){
-          req.status(405).send(err);
+          res.status(405).send(err);
         }
         else{
           console.log("FEEDBACK DETAILS=>", feedBackdetails)

@@ -24,6 +24,7 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  Button,
   NavItem,
   Dropdown,
   DropdownToggle,
@@ -37,6 +38,7 @@ import {
 } from "reactstrap";
 
 import routes from "routes.js";
+import { withRouter } from 'react-router-dom';
 
 class Header extends React.Component {
   constructor(props) {
@@ -108,6 +110,10 @@ class Header extends React.Component {
       this.sidebarToggle.current.classList.toggle("toggled");
     }
   }
+   onLogout = () => {
+    localStorage.clear();
+    this.props.history.push("/login")
+   }
   render() {
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
@@ -151,7 +157,7 @@ class Header extends React.Component {
             navbar
             className="justify-content-end"
           >
-            <form>
+            {/* <form>
               <InputGroup className="no-border">
                 <Input placeholder="Search..." />
                 <InputGroupAddon addonType="append">
@@ -160,22 +166,22 @@ class Header extends React.Component {
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-            </form>
+            </form> */}
             <Nav navbar>
-              <NavItem>
+              {/* <NavItem>
                 <Link to="#pablo" className="nav-link btn-magnify">
                   <i className="nc-icon nc-layout-11" />
                   <p>
                     <span className="d-lg-none d-md-block">Stats</span>
                   </p>
                 </Link>
-              </NavItem>
-              <Dropdown
+              </NavItem> */}
+              {/* <Dropdown
                 nav
                 isOpen={this.state.dropdownOpen}
                 toggle={(e) => this.dropdownToggle(e)}
-              >
-                <DropdownToggle caret nav>
+              > */}
+                {/* <DropdownToggle caret nav>
                   <i className="nc-icon nc-bell-55" />
                   <p>
                     <span className="d-lg-none d-md-block">Some Actions</span>
@@ -186,14 +192,10 @@ class Header extends React.Component {
                   <DropdownItem tag="a">Another Action</DropdownItem>
                   <DropdownItem tag="a">Something else here</DropdownItem>
                 </DropdownMenu>
-              </Dropdown>
+              </Dropdown> */}
               <NavItem>
-                <Link to="#pablo" className="nav-link btn-rotate">
-                  <i className="nc-icon nc-settings-gear-65" />
-                  <p>
-                    <span className="d-lg-none d-md-block">Account</span>
-                  </p>
-                </Link>
+                  {/* <i className="nc-icon nc-settings-gear-65" /> */}
+                    <Button onClick={this.onLogout}>Logout</Button>
               </NavItem>
             </Nav>
           </Collapse>
@@ -203,4 +205,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default  withRouter(Header);

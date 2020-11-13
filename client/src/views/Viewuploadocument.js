@@ -66,9 +66,9 @@ import {
                                         <tbody>
                                             {ViewuploaddocumentList?.map((item) => {
                                                 return(<tr>
-                                                    <td scope="row">narender</td>
+                                                    <td scope="row">{item?.customer.firstName}{" "}{item?.customer.lastName}</td>
                                                     <td>{item.category}</td>
-                                                    <td>upload file</td>
+                                                <td>{item.name}</td>
                                                     <td>{item.location}</td>
                                                 </tr>)
                                             })}

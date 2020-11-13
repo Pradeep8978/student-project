@@ -31,7 +31,7 @@ module.exports = {
     await Referals.findOneAndUpdate(
       { email: req.body.email }
     );
-    const cusObj = { ...req.body, role:'customer', createdOn: new Date().getTime() };
+    const cusObj = { ...req.body, role: 'customer', createdOn: new Date().getTime() };
     const newUsers = new Users(cusObj);
     const userObj = await newUsers.save();
     // Generate the token
@@ -86,8 +86,8 @@ module.exports = {
   getUsers: async (req, res, next) => {
     const findSchema = req.query.role
       ? {
-          role: req.query.role,
-        }
+        role: req.query.role,
+      }
       : {};
     const users = await Users.find(findSchema);
     res.json(users);
@@ -213,28 +213,35 @@ module.exports = {
             res.json(info.response);
           }
         });
-        res.json({message: 'OTP Sent'});
+        res.json({ message: 'OTP Sent' });
       }
     );
   },
   checkOtp: async (req, res) => {
     Users.findOne(
-      { email: req.body.email, otp: req.body.otp },
+      { email: req.body.email },
       (err, response) => {
         if (err) res.status(400).json({ message: "Error in updating otp" });
         else {
           if (!response) {
-            res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1  });
+            // res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1  });
             Users.findOneAndUpdate(
               { email: req.body.email },
               { otp: "", failures: response.failures + 1 },
-              (err, response) => {}
+              (err, response) => { }
+            );
+          } else if (Number(req.body.otp) !== Number(response.otp)) {
+            res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1 });
+            Users.findOneAndUpdate(
+              { email: req.body.email },
+              { otp: "", failures: response.failures + 1 },
+              (err, response) => { }
             );
           } else {
             Users.findOneAndUpdate(
               { email: req.body.email },
               { otp: "", failures: 0 },
-              (err, response) => {}
+              (err, response) => { }
             );
             res.send({ success: true });
           }
