@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
+const { response } = require("express");
 
 const signToken = (user) => {
   return JWT.sign(
@@ -246,6 +247,18 @@ module.exports = {
             res.send({ success: true });
           }
         }
+      }
+    );
+  },
+
+  allowFileAccess: (rea, res) => {
+    Users.findOneAndUpdate(
+      { _id: req.params.id },
+      { otp: "", failures: 0 }, 
+      (err, response) => {
+        if (err)
+          res.status(400).json({ message: "Sorry, something wrong" });
+        else res.json({ message: 'File acces granted' });
       }
     );
   },

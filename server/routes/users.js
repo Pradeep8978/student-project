@@ -82,6 +82,7 @@ router.route("/delete/:id").delete(passportJWT, UserController.deleteUser);
 
 router.route("/otp/generate").post(validateBody(schemas.otpGenerate), UserController.otpGenerate);
 router.route("/check/otp").post(validateBody(schemas.checkOtp), UserController.checkOtp);
+router.route("/file/allow-access/:id").get( passportJWT, UserController.allowFileAccess);
 router.route("/update/newpassword").put(validateBody(schemas.updateNewpassword), UserController.updateNewPassword)
 router.route("/changepassword").put(passportJWT, validateBody(schemas.changePassword), UserController.changePassword)
 
