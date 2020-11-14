@@ -54,8 +54,8 @@ import {
                         <Card>
                             <CardBody>
                                 <div>
-                                    <table class="table table-hover">
-                                        <thead class="thead-dark">
+                                    <table className="table table-hover">
+                                        <thead className="thead-dark">
                                             <tr>
                                                 <th scope="col">User Name</th>
                                                 <th scope="col">Category</th>

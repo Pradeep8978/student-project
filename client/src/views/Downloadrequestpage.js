@@ -75,9 +75,12 @@ const Downloadrequestpage = (props) => {
     notificationAlert.current.notificationAlert(options);
   }
 
-  const verifyEmail = (item) => {
-    
+  const openOTPModal = (item) => {
+    verifyEmail(item)
+  }
 
+  const verifyEmail = (item) => {
+     
     const url = `/users/otp/generate`;
     const bodyParams = {
       email: profile?.email,
@@ -85,8 +88,8 @@ const Downloadrequestpage = (props) => {
     Axios.post(url, bodyParams)
       .then(res => {
         sendNotification('success', 'Successfully generate OTP');
-        toggle()
         setSelectItem(item)
+        toggle()
 
       })
       .catch(err => {
@@ -102,11 +105,12 @@ const Downloadrequestpage = (props) => {
 
         <Row>
           <div>
-            <Modal isOpen={modal} toggle={toggle} className={className}>
+            <Modal isOpen={modal && selectItem} toggle={toggle} className={className}>
               <Fileotp
                 toggle={toggle}
                 isOpen={modal}
                 selectItem={selectItem}
+                verifyEmail={verifyEmail}
 
               />
             </Modal>
@@ -115,8 +119,8 @@ const Downloadrequestpage = (props) => {
             <Card>
               <CardBody>
                 <div>
-                  <table class="table table-hover">
-                    <thead class="thead-dark">
+                  <table className="table table-hover">
+                    <thead className="thead-dark">
                       <tr>
                         <th scope="col">User Name</th>
                         <th scope="col">Category</th>
@@ -126,14 +130,14 @@ const Downloadrequestpage = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {ViewuploaddocumentList?.map((item) => {
+                      {ViewuploaddocumentList?.map((item,index) => {
                         return (
-                          <tr>
+                          <tr key={index}>
                             <td scope="row">{item?.customer.firstName}{" "}{item?.customer.lastName}</td>
                             <td>{item.category}</td>
                             <td>{item.name}</td>
                             <td>{item.location}</td>
-                            <td onClick={() => verifyEmail(item)}><i className="fa fa-download" aria-hidden="true"></i></td>
+                            <td onClick={() => openOTPModal(item)}><i className="fa fa-download" aria-hidden="true"></i></td>
                           </tr>
                         )
                       })}

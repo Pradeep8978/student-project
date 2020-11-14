@@ -234,7 +234,7 @@ module.exports = {
             res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1 });
             Users.findOneAndUpdate(
               { email: req.body.email },
-              { otp: "", failures: response.failures + 1 },
+              {failures: response.failures + 1 },
               (err, response) => { }
             );
           } else {
