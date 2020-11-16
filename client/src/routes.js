@@ -25,6 +25,7 @@ import Viewfeedback from "views/Feedbacklist";
 import Uploadpage from "views/Uploadpage.js";
 import Downloadrequestpage from "views/Downloadrequestpage.js";
 import UpgradeToPro from "views/Upgrade.js";
+import FileGrantRequest from "views/FileGrantRequest";
 
 var routes = [
   {
@@ -57,9 +58,16 @@ var routes = [
   },
   {
     path: "/download-request-page",
-    name: "Download Request Page",
+    name: "Download Requests",
     icon: "nc-icon nc-single-02",
     component: Downloadrequestpage,
+    layout: "/admin",
+  },
+  {
+    path: "/file-grant-access",
+    name: "File Access Requests",
+    icon: "nc-icon nc-single-02",
+    component: FileGrantRequest,
     layout: "/admin",
   },
   {

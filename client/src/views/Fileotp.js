@@ -69,7 +69,6 @@ const Fileotp = ({ toggle, selectItem, verifyEmail }) => {
                     // sendNotification('danger', 'Sorry Something went wrong please try later..')
                 }
             })
-
     };
 
     const downloadFile = (uri, name) => {
@@ -79,7 +78,7 @@ const Fileotp = ({ toggle, selectItem, verifyEmail }) => {
         // element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         link.setAttribute('download', name);
         // link.download =name;
-        link.href = uri;
+        link.href = `http://${uri}`;
         document.body.appendChild(link);
         link.click();
         link.remove();

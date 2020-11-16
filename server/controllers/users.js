@@ -251,7 +251,7 @@ module.exports = {
     );
   },
 
-  allowFileAccess: (rea, res) => {
+  allowFileAccess: (req, res) => {
     Users.findOneAndUpdate(
       { _id: req.params.id },
       { otp: "", failures: 0 }, 
