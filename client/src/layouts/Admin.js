@@ -26,8 +26,25 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
+import {connect} from 'react-redux';
 
 var ps;
+
+const routesConfig = {
+  admin: [
+    '/mydetails',
+    '/file-grant-access',
+    '/charts',
+    '/viewfeedback'
+  ],
+  customer: [
+    '/mydetails',
+    '/uploadpage',
+    '/viewupload-docuement',
+    '/download-request-page',
+    '/feedback'
+  ]
+}
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -63,18 +80,19 @@ class Dashboard extends React.Component {
     this.setState({ backgroundColor: color });
   };
   render() {
+    const secureRoutes = routes.filter(item => routesConfig[this.props.role]?.includes(item.path));
     return (
       <div className="wrapper">
         <Sidebar
           {...this.props}
-          routes={routes}
+          routes={secureRoutes}
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />
         <div className="main-panel" ref={this.mainPanel}>
           <DemoNavbar {...this.props} />
           <Switch>
-            {routes.map((prop, key) => {
+            {secureRoutes.map((prop, key) => {
               return (
                 <Route
                   path={prop.layout + prop.path}
@@ -91,4 +109,8 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  role: state.auth.profile?.role || 'customer'
+})
+
+export default connect(mapStateToProps)(Dashboard);
