@@ -26,6 +26,7 @@ import Uploadpage from "views/Uploadpage.js";
 import Downloadrequestpage from "views/Downloadrequestpage.js";
 import UpgradeToPro from "views/Upgrade.js";
 import FileGrantRequest from "views/FileGrantRequest";
+import Linechart from "views/Linechart.js";
 
 var routes = [
   {
@@ -33,6 +34,13 @@ var routes = [
     name: "Dashboard",
     icon: "nc-icon nc-bank",
     component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/charts",
+    name: "Charts",
+    icon: "nc-icon nc-chart-bar-32",
+    component: Linechart,
     layout: "/admin",
   },
   {

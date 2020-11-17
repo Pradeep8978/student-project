@@ -27,7 +27,7 @@ import "../containers/auth/Auth.scss";
 import NotificationAlert from "react-notification-alert";
 
 
-const CATEGORY_TYPES = ["", "IT Asset", "Business Details", "Personal Details"];
+const CATEGORY_TYPES = ["", "Property Details", "IT Asset", "Business Details", "Personal Details"];
 
 const FormikInput = ({ field, form, ...props }) => {
   return <input {...field} {...form} {...props} />;
