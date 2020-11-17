@@ -202,7 +202,7 @@ module.exports = {
         const mailOptions = {
           from: "20perorder@gmail.com",
           to: req.body.email,
-          subject: "Forgot Password",
+          subject: "Secure file Authentication",
           text: `your otp is ${otp}`,
         };
         transporter.sendMail(mailOptions, function (error, info) {
