@@ -64,7 +64,7 @@ const Register = () => {
         localStorage.setItem("token", res.data.token);
         dispatchAction(signupSuccess(res.data))
         // dispatchAction(setAuthHeader(res.data.token))
-        history.push("/admin/dashboard");
+        history.push("/admin/mydetails");
         setLoading(false);
         dispatchAction(fetchUserProfile());
       })

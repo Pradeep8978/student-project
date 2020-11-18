@@ -5,11 +5,11 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+* Copyright 2020 Cyber Security (https://www.creative-tim.com)
 
 * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Cyber Security
 
 =========================================================
 
@@ -34,7 +34,7 @@ class Footer extends React.Component {
               <ul>
                 <li>
                   <a href="https://www.creative-tim.com" target="_blank">
-                    Creative Tim
+                    Cyber Security
                   </a>
                 </li>
                 <li>
@@ -55,7 +55,7 @@ class Footer extends React.Component {
             <div className="credits ml-auto">
               <div className="copyright">
                 &copy; {1900 + new Date().getYear()}, made with{" "}
-                <i className="fa fa-heart heart" /> by Creative Tim
+                <i className="fa fa-heart heart" /> by Cyber Security
               </div>
             </div>
           </Row>

@@ -5,11 +5,11 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 6060 Creative Tim (https://www.creative-tim.com)
+* Copyright 6060 Cyber Security (https://www.creative-tim.com)
 
 * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Cyber Security
 
 =========================================================
 

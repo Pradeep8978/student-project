@@ -40,7 +40,7 @@ const LoginPage = ({ location }) => {
       const bodyParams = { email: values.email, password: values.password };
       dispatch(loginUser(bodyParams)).then((res) => {
         // localStorage.setItem("token", res.data.token);
-        history.push("/admin/dashboard");
+        history.push("/admin/mydetails");
         dispatch(fetchUserProfile());
       });
     // }

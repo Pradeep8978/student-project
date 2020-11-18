@@ -5,11 +5,11 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+* Copyright 2020 Cyber Security (https://www.creative-tim.com)
 
 * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Cyber Security
 
 =========================================================
 
@@ -61,7 +61,7 @@ const App = () => {
     <PrivateRoute exact path="/register" component={RegisterPage}/>
 
       <PrivateRoute path="/admin" component={AdminLayout} />
-      <Redirect to="/admin/dashboard" />
+      <Redirect to="/admin/mydetails" />
     </Switch>
   </BrowserRouter>
   </Provider>

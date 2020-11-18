@@ -48,9 +48,6 @@ app.use(express.json());
 // Routes
 app.use('/uploads', express.static( 'uploads' ));
 app.use("/users", require("./routes/users"));
-app.use("/referals", require("./routes/referals"));
-app.use("/images", require("./routes/images"))
-app.use("/emails", require("./routes/emails"))
 app.use("/files", require("./routes/uploads"))
 app.use("/feedback", require("./routes/feedback"))
 

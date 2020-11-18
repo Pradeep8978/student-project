@@ -5,37 +5,27 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/paper-dashboard-react
-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+* Copyright 2020 Cyber Security (https://www.creative-tim.com)
 
 * Licensed under MIT (https://github.com/creativetimofficial/paper-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Cyber Security
 
 =========================================================
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
 import Viewuploadocument from "views/Viewuploadocument.js";
 import Mydetails from "views/Mydetails.js";
-import Typography from "views/Typography.js";
 import Feedback from "views/Feedback";
 import Viewfeedback from "views/Feedbacklist";
 import Uploadpage from "views/Uploadpage.js";
 import Downloadrequestpage from "views/Downloadrequestpage.js";
-import UpgradeToPro from "views/Upgrade.js";
 import FileGrantRequest from "views/FileGrantRequest";
 import Linechart from "views/Linechart.js";
 
 var routes = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-bank",
-    component: Dashboard,
-    layout: "/admin",
-  },
   {
     path: "/charts",
     name: "Charts",

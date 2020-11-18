@@ -1,7 +1,5 @@
 const JWT = require("jsonwebtoken");
 const Users = require("../models/users");
-const Referals = require("../models/referals");
-const emailController = require("./emails");
 const { JWT_SECRET } = require("../configuration");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -29,16 +27,13 @@ module.exports = {
     if (foundUsers) {
       return res.status(400).json({ error: "Email is already in use" });
     }
-    await Referals.findOneAndUpdate(
-      { email: req.body.email }
-    );
+
     const cusObj = { ...req.body, role: 'customer', createdOn: new Date().getTime() };
     const newUsers = new Users(cusObj);
     const userObj = await newUsers.save();
     // Generate the token
     const token = signToken(newUsers);
     // console.log("CUSTOMER OBJECT=>", userObj);
-    emailController.signupConfirm(req.body);
     res.status(200).json({ token, profile: userObj });
   },
 
