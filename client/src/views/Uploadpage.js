@@ -186,8 +186,8 @@ const Uploadpage = () => {
                           </Col>
                           <Col md="6">
                             <div className="form-group">
-                              <Field
-                                component={FormikInput}
+                              <input
+                               // component={FormikInput}
                                 name="file"
                                 type="file"
                                 className="form-control"
