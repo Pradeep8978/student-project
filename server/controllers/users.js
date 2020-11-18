@@ -195,12 +195,12 @@ module.exports = {
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
-            user: "20perorder@gmail.com",
-            pass: "tqjpnurkijsnfjxs",
+            user: "designingcyberpolicies@gmail.com",
+            pass: "patjqzoccjoqynzm",
           },
         });
         const mailOptions = {
-          from: "20perorder@gmail.com",
+          from: "designingcyberpolicies@gmail.com",
           to: req.body.email,
           subject: "Secure file Authentication",
           text: `your otp is ${otp}`,
