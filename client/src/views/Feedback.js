@@ -67,7 +67,7 @@ const Feedback = () => {
     dispatch(fetchFeeback())
   },[])
 
-  const onSubmit = (values) => { 
+  const onSubmit = (values, {resetForm}) => { 
     console.log("values===========>", values)
     // notify("tr")
     // setSuccesNotification("Succesfully")
@@ -76,7 +76,11 @@ const Feedback = () => {
     Axios.post(url, values)
       .then((res) => {
         // notify("tr")
-        setSuccesNotification("Succesfully")
+        resetForm();
+        setSuccesNotification("Succesfully sent feedback");
+        setTimeout(()=>{
+          setSuccesNotification('')
+        }, 2000)
         setLoading(false);
         dispatch(fetchFeeback())
         return res;
@@ -141,6 +145,7 @@ const Feedback = () => {
           <Col md="10">
             <Card>
               <CardBody>
+ {succesNotification && <p style={{color:'green'}}>{succesNotification}</p>}
                 <Formik
                   initialValues={initialValues}
                   validationSchema={feedBackSchema}
