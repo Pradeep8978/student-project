@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import {
     Row,
@@ -41,11 +41,16 @@ const Fileotp = ({ toggle, selectItem, verifyEmail }) => {
     let profile = useSelector((state) => state.auth.profile);
     console.log("selectitem====>", selectItem)
 
+    useEffect(()=>{
+        setFailureCount(selectItem.failures || 0)
+    }, [])
+
     const onSubmit = (values, { resetForm }) => { debugger
         const url = `/users/check/otp`;
         const bodyParams = {
             email: profile?.email,
-            otp: values.otp
+            otp: values.otp,
+            fileId: selectItem._id
         };
         Axios.post(url, bodyParams)
             .then(res => {
@@ -96,8 +101,8 @@ const Fileotp = ({ toggle, selectItem, verifyEmail }) => {
                 </Alert>
                 }
             </div>
-            {failureCount === 3 ?
-                <div style={{padding:"0px 20px", fontSize:"14px"}}>If the otp fails 3 times your file download is blocked temporarily
+            {failureCount > 2 ?
+                <div style={{padding:"0px 20px", fontSize:"14px"}}>the otp failed 3 times. your file download is blocked temporarily
                    please contact administrator</div>
                 :
                 null
@@ -135,11 +140,11 @@ const Fileotp = ({ toggle, selectItem, verifyEmail }) => {
                                     <Col md="6">
                                     </Col>
                                     <Col md="3">
-                                        <input
+                                        <button
                                             type="submit"
                                             className="btn btn-primary"
-                                            value="Submit"
-                                        />
+                                            disabled={failureCount >2}
+                                        >Submit</button>  
                                     </Col>
                                     <Col md="3">
                                         {failureCount > 2 ? null :

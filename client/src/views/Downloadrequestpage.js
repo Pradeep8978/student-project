@@ -76,7 +76,10 @@ const Downloadrequestpage = (props) => {
   }
 
   const openOTPModal = (item) => {
-    verifyEmail(item)
+    verifyEmail(item).then(() => {
+      toggle()
+
+    })
   }
 
   const verifyEmail = (item) => {
@@ -85,15 +88,16 @@ const Downloadrequestpage = (props) => {
     const bodyParams = {
       email: profile?.email,
     };
-    Axios.post(url, bodyParams)
+   return Axios.post(url, bodyParams)
       .then(res => {
         sendNotification('success', 'Successfully generate OTP');
         setSelectItem(item)
-        toggle()
-
+        // toggle()
+        return res;
       })
       .catch(err => {
         sendNotification('danger', 'Sorry Something went wrong please try later..')
+        throw err;
       })
   };
 

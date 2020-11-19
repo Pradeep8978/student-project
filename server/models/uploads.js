@@ -8,6 +8,10 @@ const uploadSchema = new Schema({
     fileUrl: String,
     location: String,
     category: String,
+    failures: {
+        type: Number,
+        default: 0
+    },
     customer:{ type: Schema.Types.ObjectId, ref: "users" }
 
 });

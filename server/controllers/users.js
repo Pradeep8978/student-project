@@ -1,5 +1,6 @@
 const JWT = require("jsonwebtoken");
 const Users = require("../models/users");
+const Uploads = require("../models/uploads");
 const { JWT_SECRET } = require("../configuration");
 const multer = require("multer");
 const mongoose = require("mongoose");
@@ -214,11 +215,14 @@ module.exports = {
     );
   },
   checkOtp: async (req, res) => {
+    console.log('GBJHBJHBJM')
+    const fileObj = await Uploads.findOne({ _id: req.body.fileId })
     Users.findOne(
       { email: req.body.email },
       (err, response) => {
         if (err) res.status(400).json({ message: "Error in updating otp" });
         else {
+          console.log('asefwrgrg')
           if (!response) {
             // res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1  });
             Users.findOneAndUpdate(
@@ -226,16 +230,32 @@ module.exports = {
               { otp: "", failures: response.failures + 1 },
               (err, response) => { }
             );
+            Uploads.findOneAndUpdate(
+              { _id: req.body.fileId },
+              { otp: "", failures: fileObj.failures + 1 },
+              (err, response) => { }
+            );
           } else if (Number(req.body.otp) !== Number(response.otp)) {
-            res.status(404).json({ message: "Invalid otp or email", failures: response.failures + 1 });
+            res.status(404).json({ message: "Invalid otp or email", failures: fileObj.failures + 1 });
             Users.findOneAndUpdate(
               { email: req.body.email },
               {failures: response.failures + 1 },
               (err, response) => { }
             );
+            console.log('FILE ID =>', req.body.fileId)
+            Uploads.findOneAndUpdate(
+              { _id: req.body.fileId },
+              { failures: fileObj.failures + 1 },
+              (err, response) => { }
+            );
           } else {
             Users.findOneAndUpdate(
               { email: req.body.email },
+              { otp: "", failures: 0 },
+              (err, response) => { }
+            );
+            Uploads.findOneAndUpdate(
+              { _id: req.body.fileId },
               { otp: "", failures: 0 },
               (err, response) => { }
             );
@@ -247,7 +267,7 @@ module.exports = {
   },
 
   allowFileAccess: (req, res) => {
-    Users.findOneAndUpdate(
+    Uploads.findOneAndUpdate(
       { _id: req.params.id },
       { otp: "", failures: 0 }, 
       (err, response) => {

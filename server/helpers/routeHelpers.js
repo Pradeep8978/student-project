@@ -86,7 +86,8 @@ module.exports = {
     }),
     checkOtp: Joi.object().keys({
       "email": Joi.string().email().required(),
-      "otp": Joi.string().required()
+      "otp": Joi.string().required(),
+      fileId: Joi.string().required()
     }),
     updateNewpassword: Joi.object().keys({
       email: Joi.string().email().required(),
