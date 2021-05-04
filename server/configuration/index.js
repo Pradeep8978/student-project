@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'test') {
   };
 } else {
   module.exports = {
-    MONGODB_CONN_STR: "mongodb+srv://cyberuser:BurvjJ7brqeItaFc@cluster0.iz487.mongodb.net/<dbname>?retryWrites=true&w=majority",
+    MONGODB_CONN_STR: "mongodb+srv://Ganeshreddykatla:Codefish%40321@ecommerce0.elzzl.gcp.mongodb.net/StudentProject?retryWrites=true&w=majority",
     JWT_SECRET: 'ramustocks',
     oauth: {
       google: {
